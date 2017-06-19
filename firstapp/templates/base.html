@@ -1,0 +1,262 @@
+{% load staticfiles %}
+{% load blog_tags %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{% static  'css/list_custom.css' %}" media="screen" title="no title" charset="utf-8">
+
+    <style type="text/css">
+        h1 {
+            font-family:'Oswald', sans-serif!important;
+            font-size:40px;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+        p {
+            font-family: 'Raleway', sans-serif;
+            font-size:18px;
+        }
+        .ui.vertical.segment.masthead {
+            height: 300px;
+            background-image: url("{% static 'images/star_banner.jpg' %}");
+            background-size: cover;
+            background-position: 100% 80%;
+        }
+
+        .ui.container.segment {
+            width: 800px;
+        }
+
+        .ui.center.aligned.header.blogslogon {
+            margin-top: 40px;
+        }
+
+        .ui.center.aligned.header.blogslogon p {
+            margin-top: 10px;
+            color: white;
+            font-size: 10px;
+        }
+        .ui.container.nav {
+            width: 500px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="ui inverted top fixed menu borderless red menu">
+        <div class="header item">
+            <div class="ui image">
+                <img src="{% static 'images/tenlogo.png' %}" alt="">
+            </div>
+        </div>
+
+        <div class="right menu">
+            <!--表示当前登录的用户-->
+            {% if request.user.is_authenticated %}
+                <div class="item">
+                    <h5 class="ui inverted header">
+                        {% if request.user.profile.profile_image %}
+                            <div class="ui avatar image">
+                                <img src="/upload/{{ request.user.profile.profile_image }}" alt="">
+                            </div>
+                        {% else %}
+                            <div class="ui avatar image">
+                                <img src="{% static 'images/default.png' %}" alt="">
+                            </div>
+                        {% endif %}
+                            <span>{{ request.user.username }}</span>
+
+                    </h5>
+                </div>
+                <div class="item">
+                    <a href="/logout/" class="ui inverted circular button">退出</a>
+                </div>
+            {% else %}
+                <div class="item">
+                    <a href="/login" class="ui inverted circular button">注册/登陆</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="ui inverted segment container nav">
+        <div class="ui  three borderless  item  menu">
+            <a class="item" href="{% url 'firstsite:index' %}"> All </a>
+            <a class="item" href="#"> New </a>
+            {% if 'editors' in request.path %}
+                <a class="active item" href="{% url 'index' %}editors"> Editor's </a>
+            {% else %}
+                <a class="item" href="{% url 'firstsite:index' %}editors"> Editor's </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="ui vertical segment">
+        <div class="ui grid">
+            {% for article in article_list %}
+            <div class="ui container vertical segment">
+                <div class="twelve wide column">
+                    <div class="ui items">
+                      <div class="item">
+                        <div class="ui medium rounded image">
+                          <img src="{{ article.url_image }}">
+                        </div>
+                        <div class="content">
+                            <a href="#">
+                                <h1 class="ui header">
+                                    {{ article.title }}
+                                </h1>
+                            </a>
+                            <i class="icon grey small unhide">10,000</i>
+                            <p>
+                                {{ article.body|truncatewords:50 }}
+                                <a href="#">
+                                    <i class="angle tiny double grey right icon">READMORE</i>
+                                </a>
+                            </p>
+
+                            <div class="ui mini  tag label">
+                                {{ article.tags }}
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+          <aside div class="four wide column">
+              <div class="widget widget-recent-posts">
+                  <h3 class="widget-title">最新文章</h3>
+                  {% get_recent_articles as recent_post_list %}
+                  <ul>
+                      {% for post in recent_post_list %}
+                      <li>
+                          <a href="{{ post.get_absolute }}">{{ post.title }}</a>
+                      </li>
+                      {% endfor %}
+                  </ul>
+              </div>
+              <div class="widget widget-archives">
+                  <h3 class="widget-title">归档</h3>
+                  {% archives as date_list %}
+                  <ul>
+                      {% for date in date_list %}
+                      <li>
+                          <a href="{% url 'firstsite:archives' date.year date.month %}">
+                              {{ date.year }} 年 {{ date.month }} 月</a>
+                      </li>
+                      {% endfor %}
+                  </ul>
+              </div>
+
+              <div class="widget widget-category">
+                  <h3 class="widget-title">分类</h3>
+                  {% get_categories_count as category_list %}
+                  <ul>
+                      {% for category in category_list %}
+                      <li>
+                          <a href="{% url 'firstsite:category' category.pk %}">{{ category.name }}({{ category.num_posts }})</a>
+                      </li>
+                      {% endfor %}
+                  </ul>
+              </div>
+
+              <div class="widget widget-category">
+                  <h3 class="widget-title">标签</h3>
+                  {% get_tag_count as tag_count_list %}
+                  <ul>
+                      {% for tag in tag_count_list %}
+                      <li>
+                          <a href="{% url 'firstsite:tag' tag.pk %}">{{ tag.name }}({{ tag.num_posts }})</a>
+                      </li>
+                      {% endfor %}
+                  </ul>
+              </div>
+
+          </div>
+        </div>
+    </div>
+
+
+
+    <div class="ui basic segment container content">
+
+        <div class="ui three column grid">
+            {% for video in video_list %}
+            <div class="column">
+                <a class="ui fluid card" href="{% url 'detail' video.id %}">
+                    <div class="image">
+                        {% if video.cover %}
+                            <img src="/upload/{{ video.cover }}" alt="" style="height:200px;object-fit: cover;">
+                        {% else %}
+                            <img src="{{ video.url_image }}" alt="" style="height:200px;object-fit: cover;">
+                        {% endif %}
+                    </div>
+                </a>
+
+                <div class="title header" href="#">{{ video.title }}</div>
+
+                <i class="icon grey unhide"></i>
+                <span style="color:#bbbbbb">1</span>
+
+                <span class="" style="color:rgb(226, 226, 226)">|</span>
+
+                <i class="icon grey checkmark"></i>
+                <span style="color:#bbbbbb"> 2 people got it</span>
+
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="ui center aligned very padded vertical segment container">
+        <div class="ui pagination menu">
+            {% if video_list.has_previous %}
+                <a href="?page={{ video_list.previous_page_number }}" class="item">
+                    <i class="icon red left arrow"></i>
+                </a>
+            {% else %}
+                <a href="?page={{ video_list.start_index }}" class="disabled item">
+                    <i class="icon left arrow"></i>
+                </a>
+            {% endif %}
+
+            {% for page_number in video_list.paginator.page_range %}
+                {% ifequal page_number  video_list.number %}
+                    <a href="?page={{ page_number }}" class="active item" style="background-color: red; color:white">
+                        {{ page_number}}
+                    </a>
+                {% else %}
+                    <a href="?page={{ page_number }}" class="item">
+                        {{ page_number }}
+                    </a>
+                {% endifequal %}
+            {% endfor %}
+
+            {% if video_list.has_next %}
+                <a href="?page={{ video_list.next_page_number }}" class="item">
+                    <i class="icon red right arrow"></i>
+                </a>
+            {% else %}
+                <a href="?page={{ video_list.end_index }}" class="disabled item">
+                    <i class="icon right arrow"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+
+        <link rel="stylesheet" href="{% static 'css/semantic.css' %}" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="{% static 'css/main.b3331d.css' %}" media="screen" title="no title" charset="utf-8">
+
+        <style type="text/css">
+
+        #container.show {
+          background: linear-gradient(200deg,#a0cfe4,#e8c37e);
+        }
+      </style>
+    </head>
+    <body>
+
+        <div id="container" q-class="show:isCtnShow" style="height: 865px;">
+          <canvas id="anm-canvas" class="anm-canvas" width="1280" height="865"></canvas>
+
+          <div class="left-col" q-class="show:isShow">
+
+              <div class="overlay" style="background: #4d4d4d"></div>
+                <div class="intrude-less">
+                    <header id="header" class="inner">
+                    <a href="#" class="profilepic">
+                        <img src="{% static 'images/github.png' %}" class="js-avatar">
+                    </a>
+                    <hgroup>
+                        <h1 class="header-author"><a href="#">Tianjigor</a></h1>
+                    </hgroup>
+
+                    <p class="header-subtitle">胆小认生，不易相处</p>
+
+
+                    <nav class="header-menu">
+                        <ul>
+
+                            <li><a href="/">主页</a></li>
+
+                            <li><a href="#">相册</a></li>
+
+                        </ul>
+                    </nav>
+                    <nav class="header-smart-menu">
+
+                      <a q-on="click: openSlider(e, &#39;innerArchive&#39;)" href="javascript:void(0)">所有文章</a>
+                      <a q-on="click: openSlider(e, &#39;aboutme&#39;)" href="javascript:void(0)">关于我</a>
+
+                    </nav>
+                    <nav class="header-nav">
+                        <div class="social">
+
+                          <a class="github" target="_blank" href="https://github.com/tianjigor" title="github"><i class="large github icon"></i></a>
+
+                          <a class="weibo" target="_blank" href="" title="wechat"><i class="large wechat icon"></i></a>
+
+                          <a class="rss" target="_blank" href="https://www.weibo.com/sweetlifutian" title="weibo"><i class="large weibo icon"></i></a>
+
+                        </div>
+                    </nav>
+                    </header>
+                </div>
+            </div>
+
+          <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+
+            <nav id="mobile-nav">
+              	<div class="overlay js-overlay" style="background: #4d4d4d"></div>
+            	<div class="btnctn js-mobile-btnctn">
+              		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
+            	</div>
+            	<div class="intrude-less">
+            		<header id="header" class="inner">
+            			<div class="profilepic">
+            				<img src="{% static 'images/github.png' %}" class="js-avatar">
+            			</div>
+            			<hgroup>
+            			  <h1 class="header-author js-header-author">Litten</h1>
+            			</hgroup>
+
+            			<p class="header-subtitle"><i class="icon icon-quo-left"></i>胆小认生，不易相处<i class="icon icon-quo-right"></i></p>
+
+                  <nav class="header-nav">
+                      <div class="social">
+
+                        <a class="github" target="_blank" href="https://github.com/tianjigor" title="github"><i class="large github icon"></i></a>
+
+                        <a class="weibo" target="_blank" href="" title="wechat"><i class="large wechat icon"></i></a>
+
+                        <a class="rss" target="_blank" href="https://www.weibo.com/sweetlifutian" title="weibo"><i class="large weibo icon"></i></a>
+
+                      </div>
+                  </nav>
+
+            			<nav class="header-menu js-header-menu">
+            				<ul style="width: 50%">
+
+
+            					<li style="width: 50%"><a href="#">主页</a></li>
+
+            					<li style="width: 50%"><a href="#">相册</a></li>
+
+            				</ul>
+            			</nav>
+            		</header>
+            	</div>
+            	<div class="mobile-mask" style="display:none" q-show="isShow"></div>
+            </nav>
+
+            <div id="wrapper" class="body-wrap">
+              <div class="menu-l">
+                <div class="canvas-wrap">
+                  <canvas data-colors="#eaeaea" data-sectionheight="100" data-contentid="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+                </div>
+                <div id="js-content" class="content-ll">
+
+                  {% for article in article_list %}
+                  <article id="post-my-fairy-tale4" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+                    <div class="article-inner">
+
+                      <header class="article-header">
+                        <h1 itemprop="name">
+                          <a class="article-title" href="{% url 'firstapp:detail' article.id %}">{{ article.title }}</a>
+                        </h1>
+                        <a href="{% url 'firstapp:detail' article.id %}" class="archive-article-date">
+                        	<time datetime="2017-06-04T19:55:00.000Z" itemprop="datePublished"><i class="calendar icon"></i>{{ article.created_time }}</time>
+                        </a>
+                      </header>
+
+                      <div class="article-entry" itemprop="articleBody">
+
+                        {{ article.body|truncatechars:400|safe }}
+
+                        <a class="article-more-a" href="{% url 'firstapp:detail' article.id %}">more &gt;&gt;</a>
+
+                      </div>
+
+                      <div class="article-info article-info-index">
+                      	<div class="article-tag tagcloud">
+                      		<i class="large tag icon"></i>
+                      		<ul class="article-tag-list">
+                    	       <li class="article-tag-list-item">
+                               {% for tag in article.tags.all %}
+                    			      <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">{{ tag.name }}</a>
+                              {% endfor %}
+                        		 </li>
+                  		    </ul>
+                      	</div>
+
+                        <p class="article-more-link">
+                          <a class="article-more-a" href="{% url 'firstapp:detail' article.id %}">展开全文 &gt;&gt;</a>
+                        </p>
+
+                        <div class="clearfix"></div>
+                      </div>
+
+                    </div>
+                  </article>
+                  {% endfor %}
+
+                  <nav id="page-nav">
+                    {% if article_list.has_previous %}
+                      <a class="extend prev disabled" href="?page={{ article_list.previous_page_number }}" rel="prev">« Prev</a>
+                    {% else %}
+                      <a class="extend prev disabled" rel="prev">« Prev</a>
+                    {% endif %}
+                    {% if page.first %}
+                      <a class="page-number" href="?page=1">1</a>
+                    {% endif %}
+                    {% if page.left %}
+                      {% if page.left_has_more %}
+                          <span>...</span>
+                      {% endif %}
+                      {% for i in page.left %}
+                          <a class="page-number" href="?page={{ i }}">{{ i }}</a>
+                      {% endfor %}
+                    {% endif %}
+                    <span class="page-number current">{{ article_list.number }}</span>
+                    {% if page.right %}
+                      {% for i in page.right %}
+                          <a class="page-number" href="?page={{ i }}">{{ i }}</a>
+                      {% endfor %}
+                      {% if page.right_has_more %}
+                          <span>...</span>
+                      {% endif %}
+                    {% endif %}
+                    {% if page.last %}
+                      <a class="page-number" href="?page={{ article_list.paginator.num_pages }}">{{ article_list.paginator.num_pages }}</a>
+                    {% endif %}
+                    {% if article_list.has_next %}
+                      <a class="extend prev disabled" href="?page={{ article_list.next_page_number }}" rel="next">Next »</a>
+                    {% else %}
+                      <a class="extend prev disabled" rel="next">Next »</a>
+                    {% endif %}
+                  </nav>
+
+                </div>
+              </div>
+            </div>
+
+          <footer id="footer">
+            <div class="outer">
+              <div id="footer-info">
+              	<div class="footer-left">
+              		© 2017 Tianjigor
+              	</div>
+                	<div class="footer-right">
+                		<a href="http://hexo.io/" target="_blank">Html5</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Copy</a> by Litten
+                	</div>
+              </div>
+            </div>
+          </footer>
+
+          </div>
+
+    </body>
+</html>
