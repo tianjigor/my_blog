@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^detail/(?P<page_num>\d+)$', detail, name="detail"),
     url(r'^comment/(?P<page_num>\d+)$', detail_comment, name="detail_comment"),
-    url(r'^index/$', index, name="index"),
+    url(r'^$', index, name="index"),
     url(r'^index/(?P<cate>[A-Za-z]+)$', index, name="index"),
     url(r'^login/$', index_login, name="login_regsiter"),
     url(r'^register/$', index_register, name="index_register"),

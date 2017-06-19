@@ -182,7 +182,6 @@ def index(request, cate=None):
         pagination_datas = pagination_data(paginator, paginator.num_pages)
     context['article_list'] = Article_list
     context['page'] = pagination_datas
-    print pagination_datas
     return render(request, 'index.html', context)
 
 
